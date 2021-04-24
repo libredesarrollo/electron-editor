@@ -47,7 +47,9 @@ const template = [
                 label:'Negritas',
                 click(){
                    const win = BrowserWindow.getFocusedWindow()
-                   win.webContents.send('editor-channel','style-bold')
+                   win.webContents.send('editorchannel','style-bold')
+
+                   console.log("Negritas")
                 }
             },
             {

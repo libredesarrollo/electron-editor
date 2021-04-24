@@ -72,7 +72,7 @@
             simplemde.value(arg)
         });
 
-        ipcRenderer.on('editor-channel', (event, arg) => {
+        ipcRenderer.on('editorchannel', (event, arg) => {
             console.log("Mensaje recibido desde el proceso principal: " + arg);
 
             editorOptions(event, arg)
@@ -83,6 +83,7 @@
         });
 
         function editorOptions(event, arg) {
+            console.log("editor")
             switch (arg) {
                 case 'style-bold':
                     simplemde.toggleBold()
