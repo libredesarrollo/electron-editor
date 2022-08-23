@@ -14,7 +14,7 @@ module.exports.open_file = function(win){
     }
 
     paths = dialog.showOpenDialogSync(win,option)
-
+ 
     if(paths && paths.length > 0){
         const content = fs.readFileSync(paths[0]).toString()
         win.webContents.send('file-open',content)
@@ -35,7 +35,7 @@ module.exports.save_file = function(win,data){
         ]
     }
 
-    path = dialog.showSaveDialogSync(win,option)
+    const path = dialog.showSaveDialogSync(win,option)
     console.log(path)
     fs.writeFileSync(path,data)
 

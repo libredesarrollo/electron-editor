@@ -12,8 +12,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^12.0.5",
-    "electron-builder": "^22.3.2"
+    "electron": "^20.0.3",
+    "electron-builder": "^23.3.3"
   },
   "dependencies": {
     "simplemde": "^1.11.2"

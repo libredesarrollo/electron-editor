@@ -27,7 +27,7 @@ const template = [
                 accelerator:'CommandOrControl+Shift+S',
                 click(){
                     const win = BrowserWindow.getFocusedWindow()
-                    win.webContents.send('editor-channel','file-save')
+                    win.webContents.send('editorchannel','file-save')
                 }
             },
             {
