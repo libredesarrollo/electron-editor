@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'self';"> -->
-        <title>My Editor</title>
-    </head>
-    <body>
-        <link rel="stylesheet"
-              href="./node_modules/simplemde/dist/simplemde.min.css">
-        <script src="./node_modules/simplemde/dist/simplemde.min.js"></script>
-        <textarea id="MyID"></textarea>
-        <!-- <button onclick="darkMode()">Dark Mode</button> -->
-        <!-- Versión de node <script>document.write(process.versions.node)</script> -->
-        <style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Editor - Sin Nombre</title>
+
+    <link rel="stylesheet" href="./node_modules/simplemde/dist/simplemde.min.css">
+    <script src="./node_modules/simplemde/dist/simplemde.min.js"></script>
+
+</head>
+
+<body>
+
+    <button onclick="openFile()">Abrir</button>
+    <button onclick="darkMode()">Dark Mode</button>
+
+    <textarea id="MyID"></textarea>
+
+    <style>
         html,
         body {
             display: flex;
@@ -25,8 +30,9 @@
         .CodeMirror {
             flex: 1
         }
-        </style>
-        <script>
+    </style>
+
+    <script>
         var simplemde = new SimpleMDE({ element: document.getElementById("MyID") });
 
         function darkMode() {
@@ -37,12 +43,12 @@
             ipcRenderer.send('file-open', 'file-open')
         }
 
-        document.ondrop = function (event) {
+        document.ondrop = function(event){
             event.preventDefault();
 
-            if (event.dataTransfer.items) {
+            if(event.dataTransfer.items){
                 item = event.dataTransfer.items[0];
-                if (item.kind == "file" && item.type == "text/plain") {
+                if(item.kind=="file" && item.type=="text/plain"){
                     var reader = new FileReader()
                     var file = item.getAsFile();
                     reader.onload = e => {
@@ -53,18 +59,10 @@
                 }
             }
         }
-        </script>
-        <script>
+    </script>
+
+    <script>
         const { ipcRenderer } = require('electron')
-
-
-        ipcRenderer.send('open-window')
-        ipcRenderer.send('open-window')
-
-        ipcRenderer.on('message', (event, arg) => {
-                alert("Mensaje recibido desde el proceso principal: " + arg);
-        });
-
 
         ipcRenderer.send('editor-channel', 'Página cargada')
 
@@ -106,6 +104,10 @@
 
             }
         }
-        </script>
-    </body>
+    </script>
+
+
+
+</body>
+
 </html>

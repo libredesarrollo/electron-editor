@@ -1,39 +1,33 @@
-const {app, ipcMain, Menu, shell, BrowserWindow, globalShortcut, dialog} = require('electron')
-
-const fs = require('fs')
-
+const { app, ipcMain, Menu, shell, BrowserWindow, globalShortcut } = require('electron')
 const { open_file, save_file } = require("./editor-options")
 
 const template = [
-    
     {
-        role:'help',
-        submenu:[
+        label: 'About us',
+        submenu: [
             {
-                label:"Sobre nosotros",
-                click(){
-                    //console.log("Hola mundo")
+                label: "About us",
+                click() {
                     shell.openExternal("https://www.electronjs.org")
                 }
-            },
-            
+            }
         ]
     },
     {
-        label:'Archivo',
-        submenu:[
+        label: 'File',
+        submenu: [
             {
-                label:"Guardar",
-                accelerator:'CommandOrControl+Shift+S',
-                click(){
+                label: "Save",
+                accelerator: 'CommandOrControl+Shift+S',
+                click() {
                     const win = BrowserWindow.getFocusedWindow()
-                    win.webContents.send('editorchannel','file-save')
+                    win.webContents.send('editorchannel', 'file-save')
                 }
             },
             {
-                label:"Abrir",
-                accelerator:'CommandOrControl+Shift+O',
-                click(){
+                label: "Open",
+                accelerator: 'CommandOrControl+Shift+O',
+                click() {
                     const win = BrowserWindow.getFocusedWindow()
                     open_file(win)
                 }
@@ -41,120 +35,92 @@ const template = [
         ]
     },
     {
-        label: 'Estilo y formato',
-        submenu:[
+        label: 'Style and format',
+        submenu: [
             {
-                label:'Negritas',
-                click(){
-                   const win = BrowserWindow.getFocusedWindow()
-                   win.webContents.send('editorchannel','style-bold')
+                label: 'Bold',
+                click() {
+                    const win = BrowserWindow.getFocusedWindow()
+                    win.webContents.send('editorchannel', 'style-bold')
 
-                   console.log("Negritas")
+                    console.log("Negritas")
                 }
             },
             {
-                label:'Italica',
-                click(){
-                   const win = BrowserWindow.getFocusedWindow()
-                   win.webContents.send('editor-channel','style-italic')
+                label: 'Italic',
+                click() {
+                    const win = BrowserWindow.getFocusedWindow()
+                    win.webContents.send('editor-channel', 'style-italic')
                 }
             },
             {
-                type:'separator'
+                type: 'separator'
             },
             {
-                label:'H1',
-                click(){
-                   const win = BrowserWindow.getFocusedWindow()
-                   win.webContents.send('editor-channel','style-h1')
+                label: 'H1',
+                click() {
+                    const win = BrowserWindow.getFocusedWindow()
+                    win.webContents.send('editor-channel', 'style-h1')
                 }
             },
             {
-                label:'H2',
-                click(){
-                   const win = BrowserWindow.getFocusedWindow()
-                   win.webContents.send('editor-channel','style-h2')
+                label: 'H2',
+                click() {
+                    const win = BrowserWindow.getFocusedWindow()
+                    win.webContents.send('editor-channel', 'style-h2')
                 }
             },
-           
+
         ]
     }
-    
 ]
 
-if(process.env.DEBUG){
-template.push(
-    {
-        label: 'Debugging',
-        submenu:[
-            {
-                role:'toggledevtools'
-            },
-            {
-                role:'reload',
-                accelerator:'Alt+C'
-            },
-            {
-                type:'separator'
-            },
-            {
-                role:'quit'
-            }
-        ]
-    }
-)
-}
-
-if(process.platform == 'win32'){
+if (process.platform == 'win32' || process.platform == 'darwin') {
     template.push(
         {
-            label: 'MacOS',
-            submenu:[
+            label: 'Default',
+            submenu: [
+                { role: 'reload' },
+                { role: 'forceReload' },
+                { role: 'toggleDevTools' },
+                { role: 'resetZoom' },
+                { role: 'zoomIn' },
+                { role: 'zoomOut' },
                 {
-                    role:'toggledevtools'
+                    type: 'separator'
                 },
-                {
-                    role:'reload'
-                },
-                {
-                    type:'separator'
-                },
-                {
-                    role:'quit'
-                }
+
+                { role: 'togglefullscreen' },
             ]
         }
-    ) 
+    )
 }
 
-ipcMain.on('editor-channel',(event, arg) => {
-    console.log("Mensaje recibido del canal 'editor-channel': "+arg)
+ipcMain.on('editor-channel', (event, arg) => {
+    console.log("Mensaje recibido del canal 'editor-channel': " + arg)
 })
 
-ipcMain.on('file-open',(event, arg) => {
+ipcMain.on('file-open', (event, arg) => {
     const win = BrowserWindow.getFocusedWindow()
     open_file(win)
 })
 
-ipcMain.on('file-save',(event, arg) => {
-    console.log("Mensaje recibido del canal 'editor-channel': "+arg)
+ipcMain.on('file-save', (event, arg) => {
     const win = BrowserWindow.getFocusedWindow()
     save_file(win, arg)
 })
 
-app.on('ready',() => {
-    console.log("App lista")
+app.on('ready', () => {
 
     globalShortcut.register('CommandOrControl+Shift+S', () => {
         const win = BrowserWindow.getFocusedWindow()
-        win.webContents.send('editor-channel','file-save')
+        win.webContents.send('editor-channel', 'file-save')
     })
 
     globalShortcut.register('CommandOrControl+Shift+O', () => {
         const win = BrowserWindow.getFocusedWindow()
         open_file(win)
     })
-    
 });
 
 const menu = Menu.buildFromTemplate(template);
